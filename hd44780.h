@@ -3,6 +3,10 @@
 #ifndef HD44780_H
 #define HD44780_H
 
+#define LCD_DDR     DDRB
+#define LCD_PORT    PORTB
+#define LCD_PIN     PINB
+
 #define RS  4
 #define RW  5
 #define E   6
@@ -17,10 +21,11 @@
 #define lcd_cursor_shift_right()    lcd_shift(0, 1)
 #define lcd_screen_shift_left()     lcd_shift(1, 0)
 #define lcd_screen_shift_right()    lcd_shift(1, 1)
+#define lcd_wait()                  while (lcd_is_busy())
+                                    
 
 uint8_t lcd_read(uint8_t);
 void lcd_write(uint8_t, uint8_t);
-void lcd_waint();
 void lcd_init();
 void lcd_shift(uint8_t, uint8_t);
 void lcd_print(uint8_t *, uint8_t);

@@ -13,6 +13,8 @@ uint8_t lcd_read(uint8_t rs) {
     LCD_PORT |= (1 << RW);
     /* set data pins to input */
     LCD_DDR &= 0xf0;
+    /* set data pins pull-up */
+    LCD_PORT |= 0x0f;
     /* make strobing pulse */
     LCD_PORT |= (1 << E);
     _delay_us(STROBE_DELAY);
@@ -24,8 +26,8 @@ uint8_t lcd_read(uint8_t rs) {
     _delay_us(STROBE_DELAY);
     LCD_PORT &= ~(1 << E);
     /* store last 4 bits of reply */
-    lcd_reply |= LCD_PIN;
-    return lcd_reply & 0x80;
+    lcd_reply |= (LCD_PIN & 0x0f);
+    return lcd_reply;
 }
 
 void lcd_write(uint8_t data, uint8_t rs) {
@@ -54,17 +56,10 @@ void lcd_write(uint8_t data, uint8_t rs) {
     LCD_PORT &= ~(1 << E);
 }
 
-void lcd_wait() {
-    while (lcd_is_busy()) { }
-}
-
 void lcd_init() {
     /* function set */
     lcd_wait();
     lcd_write_instruction(0x28);
-    /* clear */
-    lcd_wait();
-    lcd_write_instruction(0x01);
     /* set display on */
     lcd_wait();
     lcd_write_instruction(0x0c);
