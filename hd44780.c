@@ -75,7 +75,7 @@ void lcd_shift(uint8_t sc, uint8_t rl) {
 }
 
 void lcd_print(uint8_t *text, uint8_t length) {
-    int i;
+    uint8_t i;
     for (i = 0; i < length; i++) {
         lcd_wait();
         lcd_write_data(text[i]);
